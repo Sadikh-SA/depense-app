@@ -46,6 +46,8 @@ public class DepenseController {
 
     @PostMapping
     public ResponseEntity<Depense> createDepense(@RequestBody Depense depense) {
+        User currentUser = userService.getCurrentUser();
+        depense.setUser(currentUser); // on lie automatiquement le user
         return ResponseEntity.ok(depenseService.createDepense(depense));
     }
 

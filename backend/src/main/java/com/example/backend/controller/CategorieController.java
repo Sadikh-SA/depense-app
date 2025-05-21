@@ -18,6 +18,8 @@ public class CategorieController {
 
     @Autowired
     private CategorieService categorieService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public List<Categorie> getAllCategories() {
@@ -31,6 +33,8 @@ public class CategorieController {
 
     @PostMapping
     public ResponseEntity<Categorie> createCategorie(@RequestBody Categorie categorie) {
+        User currentUser = userService.getCurrentUser();
+        categorie.setUser(currentUser);
         return new ResponseEntity<>(categorieService.createCategorie(categorie), HttpStatus.CREATED);
     }
 
@@ -49,5 +53,12 @@ public class CategorieController {
     public ResponseEntity<List<Categorie>> searchCategories(@RequestParam String keyword) {
         return ResponseEntity.ok(categorieService.searchCategories(keyword));
     }
+
+    @PostMapping("/test-user")
+    public ResponseEntity<String> testUser() {
+        User currentUser = userService.getCurrentUser();
+        return ResponseEntity.ok("Connecté en tant que : " + currentUser.getUsername());
+    }
+
 
 }
